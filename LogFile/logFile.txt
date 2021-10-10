@@ -1,0 +1,15 @@
+[03:14:22]- utils.PropertyHandler  [22]- filePath C:\Project\test-weathercheck-bdd\\src\test\resources\properties\filename
+[03:14:22]- utils.PropertyHandler  [23]- C:\Project\test-weathercheck-bdd\
+[03:14:26]- stepdefinitions.AccuWeatherStepDef  [47]- Browser opened successfully
+[03:15:05]- stepdefinitions.AccuWeatherStepDef  [56]- url launched successfully
+[03:15:08]- stepdefinitions.AccuWeatherStepDef  [69]- search perfomed successfully
+[03:15:21]- stepdefinitions.AccuWeatherStepDef  [96]- current_temprature_accu_weather  24.0
+[03:15:23]- utils.RestWrapper  [61]- Payload is{q=Delhi, appid=7fe67bf08c80ded756e598d6f8fedaea, units=metric}
+[03:15:23]- utils.RestWrapper  [62]- header are  is{Accept=application/json, ContentType=application/json, api_key=authkeyfortest}
+[03:15:23]- utils.RestWrapper  [63]- Service URL is https://api.openweathermap.org/data/2.5/weather
+[03:15:23]- utils.RestWrapper  [67]- response io.restassured.internal.ValidatableResponseImpl@7efa3f63
+[03:15:23]- stepdefinitions.AccuWeatherStepDef  [103]- response is {"coord":{"lon":77.2167,"lat":28.6667},"weather":[{"id":701,"main":"Mist","description":"mist","icon":"50n"}],"base":"stations","main":{"temp":26.05,"feels_like":26.05,"temp_min":26.05,"temp_max":26.05,"pressure":1007,"humidity":78},"visibility":3500,"wind":{"speed":0,"deg":0},"clouds":{"all":0},"dt":1633901957,"sys":{"type":1,"id":9165,"country":"IN","sunrise":1633913361,"sunset":1633955168},"timezone":19800,"id":1273294,"name":"Delhi","cod":200}
+[03:15:23]- stepdefinitions.AccuWeatherStepDef  [110]- current_temprature_Open_weather_Map  26.05
+[03:15:23]- stepdefinitions.AccuWeatherStepDef  [121]- current_temprature_accu_weather  24.0
+[03:15:23]- stepdefinitions.AccuWeatherStepDef  [122]- current_temprature_Open_weather_Map  26.05
+[03:15:23]- stepdefinitions.AccuWeatherStepDef  [124]- diffInTemprature  2.0500000000000007
