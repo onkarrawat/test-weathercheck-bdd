@@ -20,77 +20,52 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.response.ValidatableResponse;
+import pages.AccueWeatherSearchPage;
+import pages.WeatherForeCastPage;
+import utils.BaseClass;
 import utils.LoggerFile;
 import utils.PropertyHandler;
 import utils.RestWrapper;
 
-public class AccuWeatherStepDef {
+public class AccuWeatherStepDef extends BaseClass {
 	RestWrapper restWrapper;
 	Double current_temprature_accu_weather;
 	WebDriver driver = null;
 	ValidatableResponse response;
 	Double current_temprature_Open_weather_Map;
-
+	AccueWeatherSearchPage accueWeatherSearchPage;
+	WeatherForeCastPage weatherForeCastPage;
 	OpenWeatherMapObject openWeatherMapObject = new OpenWeatherMapObject();
 	Logger logger = utils.LoggerFile.logConfig(AccuWeatherStepDef.class.getName());
-	PropertyHandler propertyHandler = new PropertyHandler();
+	
 
-	@SuppressWarnings("deprecation")
-	@Given("open browser")
+
+	@Given("open browser and launch url")
 	public void open_browser() throws Throwable {
-		System.setProperty("webdriver.chrome.driver",
-				System.getProperty("user.dir") + File.separator + "\\chromedriver.exe");
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(Long.valueOf(propertyHandler.readProperty("ImplicitWaitInSeconds")),
-				TimeUnit.SECONDS);
-		logger.info("Browser opened successfully");
+		BaseClass.initialization();
 
 	}
 
-	@And("launch the url")
-	public void launch_the_url() throws Throwable {
-
-		driver.get(propertyHandler.readProperty("Accu_Weather_Host"));
-
-		logger.info("url launched successfully");
-
-	}
-
-	@When("^Enter city name in search textbox \"(.*)\"$")
-	public void Enter_city_name_in_search_textbox(String city) throws Throwable {
-
-		driver.findElement(By.xpath("//input[@name='query']")).clear();
-
-		driver.findElement(By.xpath("//input[@name='query']")).sendKeys(city);
-
-		driver.findElement(By.xpath("//input[@name='query']")).sendKeys(Keys.ENTER);
-		logger.info("search perfomed successfully");
+	
+	@When("^Perform city search for weather info \"(.*)\"$")
+	public void Perform_city_search_for_weather_info(String city) throws Throwable {
+		accueWeatherSearchPage =  new AccueWeatherSearchPage();
+		accueWeatherSearchPage.searchCityWeatherForecast(city);
+		
 
 	}
 
 	@When("^verify current weather page for the searched city$")
 	public void verify_current_weather_page_for_the_city() throws Throwable {
-
-		try {
-			driver.findElement(
-					By.xpath("//h2[@class='cur-con-weather-card__title' and contains(text(),'Current Weather')]"))
-					.isDisplayed();
-
-		}
-
-		catch (Exception e) {
-			Assert.fail("Weather report page for searched city not found");
-		}
+		weatherForeCastPage = new WeatherForeCastPage();
+		weatherForeCastPage.verifyWeatherforeCastPageIsDisplayed();
 
 	}
 
 	@When("^store the temprature in variable$")
 	public void stoe_the_temprature_in_variable() throws Throwable {
-		String currenttemp = driver
-				.findElement(By.xpath("//a[contains(@class,'cur-con-weather-card')]//div[@class='temp']")).getText()
-				.replaceAll("[^\\d]", "");
-		current_temprature_accu_weather = Double.valueOf(currenttemp);
+		weatherForeCastPage = new WeatherForeCastPage();
+		current_temprature_accu_weather = Double.valueOf(weatherForeCastPage.getCurrentTemperatureOfCity());
 		logger.info("current_temprature_accu_weather  " + current_temprature_accu_weather);
 	}
 
@@ -116,13 +91,11 @@ public class AccuWeatherStepDef {
 	@When("^Assert that current temprature from Accu Weather and Open Weather API are matching uptill variance of \"(.*)\" degree$")
 	public void Assert_that_current_tempratue_from_Accu_Weather_and_open_Weather_API_are_matching_uptill_variance_of_1_degree(
 			String AcceptedVariance) throws Throwable {
-		logger.info("current_temprature_accu_weather  " + current_temprature_accu_weather);
-		logger.info("current_temprature_Open_weather_Map  " + current_temprature_Open_weather_Map);
 		Double diffInTemprature = current_temprature_accu_weather - current_temprature_Open_weather_Map;
 		logger.info("diffInTemprature  " + Math.abs(diffInTemprature));
 		if (Math.abs(diffInTemprature) <= Double.valueOf(AcceptedVariance))
-			logger.info("Current Temperature for the city is in acceptable variance of " + AcceptedVariance
-					+ " from Accu weather source and Open Weather API Source");
+			logger.info("Current Temperature for the city is in acceptable variance of upto " + AcceptedVariance
+					+ " degree celcious from Accu weather source and Open Weather API Source");
 		else
 			org.junit.Assert.fail(Math.abs(diffInTemprature)
 					+ " Current Temperature variation is more than the Acceptable variance which is " + AcceptedVariance
@@ -134,6 +107,6 @@ public class AccuWeatherStepDef {
 
 	@When("close the browser")
 	public void close_the_browser() throws Throwable {
-		driver.quit();
+		BaseClass.closeBrowser();
 	}
 }

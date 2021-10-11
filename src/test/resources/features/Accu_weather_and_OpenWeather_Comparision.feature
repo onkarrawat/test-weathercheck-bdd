@@ -1,9 +1,8 @@
 Feature: Compare city temprature from Accu Weather and Open weather API 
 
  Scenario Outline: validate difference between City curent temprature from UI and API for "<City>"
-    Given open browser
-    And  launch the url
-    When Enter city name in search textbox "<City>"
+    Given open browser and launch url
+    When Perform city search for weather info "<City>"
     And verify current weather page for the searched city 
     And store the temprature in variable
     Then close the browser
