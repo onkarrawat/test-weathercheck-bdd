@@ -52,7 +52,7 @@ public class AccuWeatherStepDef {
 	public void launch_the_url() throws Throwable {
 
 		driver.get(propertyHandler.readProperty("Accu_Weather_Host"));
-		Thread.sleep(3000);
+
 		logger.info("url launched successfully");
 
 	}
@@ -61,24 +61,22 @@ public class AccuWeatherStepDef {
 	public void Enter_city_name_in_search_textbox(String city) throws Throwable {
 
 		driver.findElement(By.xpath("//input[@name='query']")).clear();
-		Thread.sleep(2000);
+
 		driver.findElement(By.xpath("//input[@name='query']")).sendKeys(city);
 
-		Thread.sleep(1000);
 		driver.findElement(By.xpath("//input[@name='query']")).sendKeys(Keys.ENTER);
 		logger.info("search perfomed successfully");
-		Thread.sleep(2000);
 
 	}
 
 	@When("^verify current weather page for the searched city$")
 	public void verify_current_weather_page_for_the_city() throws Throwable {
-		Thread.sleep(2000);
+
 		try {
 			driver.findElement(
 					By.xpath("//h2[@class='cur-con-weather-card__title' and contains(text(),'Current Weather')]"))
 					.isDisplayed();
-			Thread.sleep(2000);
+
 		}
 
 		catch (Exception e) {
